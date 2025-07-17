@@ -24,9 +24,6 @@ int main () {
     // Generate a random board
     RandomizeBoard(board);
 
-    // Display initial board
-    DisplayBoard(board);
-
     std::vector<std::pair<unsigned, unsigned>> boxes;                 // To track the positions of all current boxes
     std::vector<std::pair<unsigned, unsigned>> obstacles;             // To track the positions of all current obstacles
 
@@ -53,6 +50,8 @@ int main () {
     bool state_change = false;                              // Tracks change of board state per turn
 
     do {
+        DisplayBoard(board);
+
         state_change = false;
 
         for (auto &[row, col] : boxes) {                    // Box moves 1 space down if possible
@@ -69,8 +68,8 @@ int main () {
         for (auto it = obstacles.begin(); it != obstacles.end(); ) {
             const auto [row, col] = *it;
 
-            if (board[row][col] == '*') {       // 3-by-3 explosion, remove surrounding boxes
-                board[row][col] = '#';          // Temporary
+            if (board[row][col] == '*') {                   // 3-by-3 explosion, remove surrounding boxes
+                board[row][col] = '#';                      // Temporary
 
                 for (unsigned brow = std::max(0U, row - 1); brow <= std::min(max_row, row + 1); brow++) {
                     for (unsigned bcol = std::max(0U, col - 1); bcol <= std::min(max_col, col + 1); bcol++) {
@@ -81,14 +80,12 @@ int main () {
                     }
                 }
 
-                it = obstacles.erase(it);       // There's no longer an obstacle here
+                it = obstacles.erase(it);                   // There's no longer an obstacle here
             }
             else it++;
         }
 
-        DisplayBoard(board);
-
-    } while (state_change);                     // Continue until no change in (two consequtive) states
+    } while (state_change);                                 // Continue until no change in (two consequtive) states
 
     return 0;
 }
