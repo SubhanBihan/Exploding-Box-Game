@@ -65,24 +65,26 @@ int main () {
             }
         }
 
-        for (auto it = obstacles.begin(); it != obstacles.end(); ) {
-            const auto [row, col] = *it;
+        if (state_change) {
+            for (auto it = obstacles.begin(); it != obstacles.end(); ) {
+                const auto [row, col] = *it;
 
-            if (board[row][col] == '*') {                   // 3-by-3 explosion, remove surrounding boxes
-                board[row][col] = '#';                      // Temporary
+                if (board[row][col] == '*') {               // 3-by-3 explosion, remove surrounding boxes
+                    board[row][col] = '#';                  // Temporary
 
-                for (unsigned brow = std::max(0U, row - 1); brow <= std::min(max_row, row + 1); brow++) {
-                    for (unsigned bcol = std::max(0U, col - 1); bcol <= std::min(max_col, col + 1); bcol++) {
-                        if (board[brow][bcol] == '#') {
-                            board[brow][bcol] = '-';
-                            boxes.erase(std::remove(boxes.begin(), boxes.end(), std::make_pair(brow, bcol)), boxes.end());
+                    for (unsigned brow = std::max(0U, row - 1); brow <= std::min(max_row, row + 1); brow++) {
+                        for (unsigned bcol = std::max(0U, col - 1); bcol <= std::min(max_col, col + 1); bcol++) {
+                            if (board[brow][bcol] == '#') {
+                                board[brow][bcol] = '-';
+                                boxes.erase(std::remove(boxes.begin(), boxes.end(), std::make_pair(brow, bcol)), boxes.end());
+                            }
                         }
                     }
-                }
 
-                it = obstacles.erase(it);                   // There's no longer an obstacle here
+                    it = obstacles.erase(it);               // There's no longer an obstacle here
+                }
+                else it++;
             }
-            else it++;
         }
 
     } while (state_change);                                 // Continue until no change in (two consequtive) states
