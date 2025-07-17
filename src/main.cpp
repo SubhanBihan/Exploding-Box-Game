@@ -27,7 +27,7 @@ int main () {
     std::vector<std::pair<unsigned, unsigned>> boxes;                 // To track the positions of all current boxes
     std::vector<std::pair<unsigned, unsigned>> obstacles;             // To track the positions of all current obstacles
 
-    for (unsigned row = 0U; row <= max_row; row++) {                  // Track the initial positions of boxes and obstacles
+    for (int row = max_row; row >= 0; row--) {                  // Track the initial positions of boxes and obstacles. Going in reverse order of rows makes sorting unnecessary
         for (unsigned col = 0U; col <= max_col; col++) {
             switch (board[row][col])
             {
@@ -45,7 +45,7 @@ int main () {
         }
     }
 
-    std::ranges::sort(boxes, [](const auto& box1, const auto& box2){ return box1.first > box2.first; });    // So that we move from bottom to top when iterating through 'boxes'
+    // std::ranges::sort(boxes, [](const auto& box1, const auto& box2){ return box1.first > box2.first; });    // So that we move from bottom to top when iterating through 'boxes'
 
     bool state_change = false;                              // Tracks change of board state per turn
 
